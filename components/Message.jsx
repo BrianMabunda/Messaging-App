@@ -17,6 +17,7 @@ function Message(props) {
     const [name,setName]=useState("None");
     const [time,setTime]=useState("None");
     const [text,setText]=useState("None");
+    let textLengthLimit=20;
     /* fetch("http://192.168.43.16:5000").
         then(resp1=>console.log(resp1))
         */
@@ -34,6 +35,7 @@ function Message(props) {
                     if(request=="chat")
                         setChat(Data)
                     else{
+                        console.log(Data)
                         setContact(Data);
                         store.dispatch({"type":"setContacts","payload":Data});
                         console.log(store.getState().contacts); 
@@ -46,6 +48,7 @@ function Message(props) {
         useEffect(()=>{
             API("contact");
             API("chat");
+            setTimeout(()=>{"Sleeping"},1000)
             
         },[])
         if(chat!="waiting" && contact!="waiting"){
@@ -68,7 +71,7 @@ function Message(props) {
             <View style={styles.messageInfo}>
 
                 <Image style={styles.messageStatus} source={require("../assets/thumbtack.png")}/>
-                <Text style={styles.messageSummary}>{(chat!="waiting")?chat.Chats[chat.Chats.length-1].text:"LOL"}</Text>
+                <Text style={styles.messageSummary}>{(chat!="waiting")?(chat.Chats[chat.Chats.length-1].text.length>textLengthLimit)?`${chat.Chats[chat.Chats.length-1].text.slice(0,textLengthLimit)}....`:chat.Chats[chat.Chats.length-1].text:"lolo"}</Text>
                 <Text style={styles.unreadCount}>6</Text>
 
             </View>
