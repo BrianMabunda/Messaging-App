@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, Button, ScrollView} from 'react-native';
-
-
 import store from '../reducers/store';
 import ChatText from './ChatText';
 import ChatInput from './ChatInput';
+import { Dimensions } from "react-native-web";
+
+const vh =Dimensions.get("window").height
+const vw =Dimensions.get("window").width
 let ip;
 // ip="192.168.43.16"
 ip="localhost"
@@ -15,22 +17,22 @@ function MessageHeader(props) {
         console.log(props.data.Contacts[0])
         data=props.data.Contacts[0]
     }
+    console.log(data)
     return (
         <View style={styles.headerContainer} >
             <Image style={styles.profilePic}  source={require("../assets/icon.png")}/>
+            
+            <View style={styles.contactInfo}>
+                <Text style={styles.contact}>{`${data.name}`}</Text>
+                <Text>{`Last seen yesterday 08:00`}</Text>
+            </View>
+            <View style={styles.extrasContainer}>
+            <Image style={styles.optionsPic} source={require("../assets/search.svg")}/>
             <View onTouchStart={()=>{
                 store.dispatch({"type":"Home"});
             }}>
                 <Image style={styles.backPic}  source={require("../assets/arrow-left-long.svg")} />
             </View>
-            <View style={styles.contactInfo}>
-                <Text style={styles.contact}>{data.name}</Text>
-                <Text>{`Last seen yesterday 08:00`}</Text>
-            </View>
-            <View style={styles.extrasContainer}>
-                <Image style={styles.voicePic}  source={require("../assets/phone.svg")}/>
-                <Image style={styles.videoPic}  source={require("../assets/video.svg")}/>
-                <Image style={styles.optionsPic} source={require("../assets/search.svg")}/>
             </View>
             
         </View>
@@ -72,10 +74,10 @@ function MessageArea() {
         try {
             var response;
             if(request=="chat")
-                response=await fetch("http://192.168.43.16:5000/chats");
+                response=await fetch(`http://${ip}:5000/chats`);
                 
             else
-                response=await fetch(`http://192.168.43.16:5000/contacts`);
+                response=await fetch(`http://${ip}:5000/contacts`);
             const Data=await response.json();
             if(Data!=Response){
                 if(request=="chat")
@@ -132,15 +134,15 @@ const styles=StyleSheet.create({
         flex:1,
         width:"100%",
         position:"relative",
-        backgroundColor:"rgb(38, 46, 25)",
+        backgroundColor:"lightgray",
         
     },
     container:{
-        backgroundColor:"rgb(38, 46, 25)",
+        backgroundColor:"lightgray",
         display:"flex",
         flexDirection:"column",
         position:"relative",
-        maxHeight:600,
+        maxHeight:vh*0.9,
 
 
     },
@@ -164,12 +166,11 @@ const styles=StyleSheet.create({
     backPic:{
         height:25,
         width:25,
-        left:-50,
-        top:5,
+        marginLeft:0.05*vw
     },
     contactInfo:{
-        top:404,
-        left:-20,
+        marginLeft:0.05*vw,
+        alignSelf:"center",
 }
     ,
     contact:{
@@ -181,26 +182,25 @@ const styles=StyleSheet.create({
     headerContainer:{
         flexDirection:"row",
         backgroundColor:"green",
-        width:"100%",
-        height:100,
+        width:vw,
+        height:vh*0.09,
         position:"relative",
-        top:-10,
         
 
     },
     profilePic:{
-        height:50,
-        width:50,
+        height:0.06*vh,
+        width:0.06*vh,
         justifyContent:"flex-start",
-        top:45,
-        borderRadius:25,
+        alignSelf:"center",
+        // top:0.0*vh,
+        borderRadius:50,
+        marginLeft:0.05*vw,
     },
     extrasContainer:{
         flexDirection:"row",
         alignSelf:"center",
-        alignContent:"space-between",
-        left:-5,
-        top:10,
+        marginLeft:0.2*vw,
     },
 })
 
