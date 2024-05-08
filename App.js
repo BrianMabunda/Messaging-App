@@ -8,8 +8,10 @@ import StatusArea from './components/StatusArea';
 import MessageArea from './components/MessageArea';
 import { Provider } from 'react-redux';
 import store from './reducers/store';
-import StatusView from './components/StatusView';
-import StatusCreate from './components/StatusCreate';
+import ChatText from './components/ChatText';
+import Test_storage from './components/Test_storage';
+// import StatusView from './components/StatusView';
+// import StatusCreate from './components/StatusCreate';
 
 import {A} from 'expo'
 import {name as appName} from './app.json'
@@ -34,21 +36,41 @@ function SpecialButton(name){
 */
 export default function App() {
   // AppRegistry.registerComponent(appName,()=>App);
-  const [state,setState]=useState(3);
-  const [bstate,setBstate]=useState(3);
+  const [state,setState]=useState(1);
+  const [bstate,setBstate]=useState(0);
+  const [reFresh,setReFresh]=useState(0);
+  const [, forceUpdate] = useState(0); // State not used directly
+    const handleUpdate = () => {
+        forceUpdate(n => !n); // Toggling state value will re-render the component
+      };
   setInterval(()=>{
     //console.log(store.getState().State)
     setState(store.getState().State);
     setBstate(store.getState().bState);
+    setReFresh(store.getState().refresh)
+    if(reFresh==1){
+      let itt=0
+      if(itt<2){
+        handleUpdate()
+      }
+      else{
+        store.dispatch({"type":"Done"});
+      }
+      itt++
+      
+    }
   },200)
   var x=0;
   return (
     <Provider store={store}>
 
     <View style={styles.container}>
-      {(state===0)?<Header />:(state===1)?<MessageArea />:(state===2)?<StatusView />:(state===3)?<StatusCreate />:<View />}
-
-      {(state===0)?(bstate===0)?<Message />:<StatusArea />:<View />}
+      {/* {(state===0)?<Header />:(state===1)?<MessageArea />:(state===2)?<StatusView />:(state===3)?<StatusCreate />:<View />} */}
+      {/* {(state===0)?<Header />:(state===1)?<MessageArea />:<View />} */}
+      {/* {<MessageArea/>} */}
+      {/* {(state===0)?(bstate===0)?<Message />:<View/>:<View />*/}
+      {/* {(state===0)?(bstate===0)?<Message />:<View/>:<View />}  */}
+      {/* {<ChatText/>} */}
     </View>
     </Provider>
 
@@ -58,7 +80,7 @@ export default function App() {
 const styles = StyleSheet.create({
 
   container: {
-    backgroundColor: 'white',
+    backgroundColor: 'lightgray',
     position:"relative",
     flexDirection:"column",
     alignItems:"center",

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Image, View,Text } from "react-native";
 import store from "../reducers/store";
 let itt=0;
+import { Dimensions } from "react-native-web";
+const vh =Dimensions.get("window").height
+const vw =Dimensions.get("window").width
 
 
 const data= new FormData();

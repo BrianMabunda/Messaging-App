@@ -5,6 +5,7 @@ import sentText from './sentText';
 import contacts from './contacts';
 import contact from './contact';
 import statuses from './statuses';
+import reFreshMessage from './refreshMessages';
 
 
 const allReducer=combineReducers({
@@ -14,6 +15,7 @@ const allReducer=combineReducers({
     contacts:contacts,
     contact:contact,
     status:statuses,
+    refresh:reFreshMessage,
 
 });
 
