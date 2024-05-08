@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Button, StyleSheet, TextInput,TextInputBase,Image,TouchableOpacity,View } from 'react-native';
 import MessageArea from './MessageArea';
 import store from '../reducers/store';
+import { Dimensions } from "react-native-web";
+
+const vh =Dimensions.get("window").height
+const vw =Dimensions.get("window").width
+var ip="localhost"
 
 var toBeSent={
     key:0,
@@ -17,13 +22,19 @@ const data1={
     user:true,
 }
 const apiCall =async (data)=>{
-    fetch("http://192.168.43.16:5000/sendText",{method:"Post",headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    fetch(`http://${ip}:5000/sendText`,{method:"Post",headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+    store.dispatch({"type":"refresh"});
+    store.dispatch({"type":"Done"});
 }
 function ChatInput(props) {
     //variable for storing text
     const [chatText,setChatText]=useState("");
     //Variable for input container
     const [text,setText]=useState(styles.textSmall)
+    
+
+  // Call this function to trigger a re-render
+ 
     //clears the text input after the button is pressed
    
     return (
@@ -34,11 +45,12 @@ function ChatInput(props) {
 
                        scrollEnabled={true}
                        autoFocus
+                       multiline
                        value={chatText}
                        onChangeText={(text)=>{
                            //Get Text From TextInput element
                            setChatText(text)
-                           if(text.length>72)
+                           if(text.length>39)
                                 setText(styles.textBig);
                             else
                             setText(styles.textSmall);
@@ -61,44 +73,50 @@ function ChatInput(props) {
 
                                         console.log(store.getState().sent);
                                   }}>
-                    <Image style={styles.submitPic} source={require("../assets/check.svg")} />
+                    <Image style={styles.submitPic} source={require("../assets/send.svg")} />
                 </TouchableOpacity>
         </View>
     );
 }
 const styles =StyleSheet.create({
     submitPic:{
-        height:50,
-        width:50,
+        height:0.04*vh,
+        width:0.04*vh,
+        backgroundColor:"darkgreen",
+        borderRadius:50
     },
     ChatInputContainer:{
         flexDirection:"row",
         display:"flex",
         position:'relative',
+        backgroundColor:"silver",
+        borderRadius:50,
+        width:vw*1,
+        // marginLeft:vw*0.05
         
-        
-        
+         
     },
     textSmall:{
-        borderWidth:5,
-        borderColor:"gray",
-        width:260,
-        height:50,
-        borderRadius:15,
+        borderColor:"None",
+        fontSize:0.021*vh,
+        borderWidth:0,
+        width:vw*0.8,
+        height:vh*0.07,
+        marginLeft:vw*0.10
     },
     textBig:{
-        borderWidth:5,
-        borderColor:"gray",
-        width:260,
-        height:150,
-        borderRadius:15,
+        // borderColor:"gray",
+        fontSize:0.021*vh,
+        width:vw*0.8,
+        height:vh*0.1,
+        marginLeft:vw*0.1
     },
   
     submit:{
-        height:50,
-        width:50,
-        
-        borderRadius:25,
+        height:5,
+        width:5,
+        alignSelf:"center",
+        justifyContent:"center"
     }
 })
 
